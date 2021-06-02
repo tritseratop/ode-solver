@@ -37,10 +37,11 @@ public:
      * @param params Параметры решателя
      * @return Возвращает решение диф. уравнения calcDer
      */
-    virtual double solve(const double& x,
-                         const double& y,
-                         calcDerivative calcDer,
-                         SolverParams params) = 0;
+    virtual int solve(const std::vector<double>& input,
+                      const std::vector<double>& output,
+                      std::vector<double>& newout,
+                      std::vector<calcDerivative> funcs,
+                      SolverParams params) = 0;
     /**
      * @brief getName
      * @return Имя решателя

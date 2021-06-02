@@ -21,7 +21,7 @@ unix {
     INSTALLS += target
 }
 
-win32:CONFIG(release, debug|release): DESTDIR = $$PWD/../../target
-else:win32:CONFIG(debug, debug|release): DESTDIR = $$PWD/../../target
+win32:CONFIG(release, debug|release): DESTDIR = $$PWD/../../target/release
+else:win32:CONFIG(debug, debug|release): DESTDIR = $$PWD/../../target/debug
 
 CONFIG += C++11

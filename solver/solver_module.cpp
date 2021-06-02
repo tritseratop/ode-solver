@@ -5,15 +5,15 @@
 using namespace std;
 
 int SolverModule::solve(const double& x, const double& y, double& result, calcDerivative f, SolverParams p) {
-    if (current_solver != nullptr) {
-        result = current_solver->solve(x, y, f, p);
-        return 1;
-    }
-    // Явный метод Эйлера
-    else {
+//    if (current_solver != nullptr) {
+//        result = current_solver->solve(x, y, f, p);
+//        return 1;
+//    }
+//    // Явный метод Эйлера
+//    else {
         result = y + p.h * f(x, y);
         return 1;
-    }
+//    }
 }
 
 int SolverModule::solveSystem(const vector<double>& input,
@@ -22,10 +22,7 @@ int SolverModule::solveSystem(const vector<double>& input,
                               vector<calcDerivative> funcs,
                               SolverParams params) {
     if (current_solver != nullptr) {
-        for (size_t i = 0; i < funcs.size(); ++i) {
-            newout[i] = current_solver->solve(input[i], output[i], funcs[i], params);
-        }
-        return 1;
+        return current_solver->solve(input, output, newout, funcs, params);
     }
     // Явный метод Эйлера
     else {

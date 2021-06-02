@@ -1,32 +1,43 @@
 #include "runge_kutta4.h"
 
+using namespace std;
+
 extern "C" __declspec(dllexport) ISolver * CreateSolver() {
     return new RK4();
 }
 
-double RK4::solve(const double& x,
-                  const double& y,
-                  calcDerivative calcDer,
-                  SolverParams params) {
+int RK4::solve(const vector<double>& input,
+               const vector<double>& output,
+               vector<double>& newout,
+               vector<calcDerivative> funcs,
+               SolverParams params) {
 
-    static double prev_x;
+    size_t n = newout.size();
+    static vector<double> prev_input(n);
     static bool isFirst = 1;
 
     if(isFirst) {
-        prev_x = x;
+        prev_input = input;
         isFirst = 0;
-        return y + params.h * calcDer(x, y);
+        for(size_t i = 0; i < n; ++i)
+        {
+            newout[i] = output[i] + params.h * funcs[i](input[i], output[i]);
+        }
+        return 1;
     } else {
-        double k1, k2, k3, k4;
-        k1 = params.h / 2 * calcDer(prev_x, y);
-        k2 = params.h / 2 * calcDer((prev_x + x)/2, y + k1);
-        k3 = params.h     * calcDer((prev_x + x)/2, y + k2);
-        k4 = params.h / 2 * calcDer(x, y + k3);
+        vector<double> k1(n), k2(n), k3(n), k4(n);
+        for(size_t i = 0; i < n; ++i)
+        {
+            k1[i] = params.h / 2 * funcs[i](prev_input[i], output[i]);
+            k2[i] = params.h / 2 * funcs[i]((prev_input[i] + input[i])/2, output[i] + k1[i]);
+            k3[i] = params.h     * funcs[i]((prev_input[i] + input[i])/2, output[i] + k2[i]);
+            k4[i] = params.h / 2 * funcs[i](input[i], output[i] + k3[i]);
 
-        prev_x = x;
-        return y + (k1 + 2 * k2 + k3 + k4) / 3;
+            newout[i] = output[i] + (k1[i] + 2 * k2[i] + k3[i] + k4[i]) / 3;
+        }
+        prev_input = input;
+        return 1;
     }
-
 }
 
 std::string RK4::getName() {

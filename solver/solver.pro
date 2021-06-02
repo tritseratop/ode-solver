@@ -11,7 +11,7 @@ win32-g++ {
 } else:win32-msvc* {
 }
 
-INCLUDEPATH += ../solver/headers/headers
+INCLUDEPATH += ../solver/headers
 
 SOURCES += main.cpp \
     print_tools.cpp \
@@ -26,6 +26,5 @@ HEADERS += \
     headers/solver_module.h \
     headers/solver_interface.h
 
-
-win32:CONFIG(release, debug|release): DESTDIR = $$PWD/../../target
-else:win32:CONFIG(debug, debug|release): DESTDIR = $$PWD/../../target
+win32:CONFIG(release, debug|release): DESTDIR = $$PWD/../../target/release
+else:win32:CONFIG(debug, debug|release): DESTDIR = $$PWD/../../target/debug
